@@ -21,7 +21,7 @@ const FoodStyleCard = observer((props: FoodStyleCardProps) => {
       <Text style={styles.food}>{props.food.name}</Text>
       {props.isFromModal ? (
         <>
-          <TouchableOpacity onPress={() => foodStyleStore.resetSelection()}>
+          <TouchableOpacity onPress={foodStyleStore.resetSelection}>
             <MaterialIcon size={24} color='#11b777' name='close-circle-outline' />
           </TouchableOpacity>
         </>

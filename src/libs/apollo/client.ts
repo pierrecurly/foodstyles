@@ -9,7 +9,8 @@ import { onError } from '@apollo/client/link/error'
 import { getMainDefinition } from '@apollo/client/utilities'
 
 const config = {
-  'token': 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMxLCJ0eXBlIjoiQUNDRVNTIiwiaWF0IjoxNjUzNzIyODUwLCJleHAiOjE2NTQzMjc2NTB9.P2QZNFe270vbJdkgbSCW8axgBAEASDE64t0ocTf8n-Vev0HO7XeBAnSBQXG2rseCANA7fOfqksiEIeNxk2MA4GPaDBORwIzaqbBBOHDgcF1DdA0enwXrbs_M1D70VPwtDp2zvwFU0rFIwhmuUPhUnouSVNisaEmVbo7MJStWgjVZ2HyX_51OOXq-lf7XsS2kzOfqvghdNgQZPDBxJVKTHrfkeFSL1s3MxsdroBvg42RkQNVlW-YCtDs96hf1F-SCEG-noSTxZg1xR0Xb20SQzZPcuM3KT-8Lpc5DPMDYdczEBLK05gg8ccksmtgyabLWbXVi4l4SIyQeC2DlbjixLg'
+  url: 'https://api-dev.foodstyles.com/graphql',
+  token: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzMxLCJ0eXBlIjoiQUNDRVNTIiwiaWF0IjoxNjUzNzQ3MzQ2LCJleHAiOjE2NTQzNTIxNDZ9.E2ev4kkmSIxA6igc4W2GgFjgDdV6dqQbdNZWVbiiK-vUnim8TzOrzMclArSdHO0QRBg_nGimOlqL3elxtgGV4_yBExzU6rx78ev3CvU8hwULMQbwYFlrRB5MonWhIsOWzgcA4sGhkjv1rgjTrk3vwy8g0MATrxhkCriaCSqVg1JuF198Bv2EVXbzSB58rFJIG9zj7nWBACrOnmBeJCfERAxcjS1b0Cq6zktxD-0Xnesr5gJJTEr1Gdvem9yYuKkCN-aZOZy63HfESKTWr7IoE4ovSttELGNizKU65FlIB-YzX5Xt2OJhZchG3IB1M7VQnLj3Rt85lvtZ6IMWmv3oJA'
 }
 
 const errorLink = onError(({ networkError }) => {
@@ -23,20 +24,22 @@ const errorLink = onError(({ networkError }) => {
 })
 
 // Create an http link:
-const gethttpLink = () => {
+const getHttpLink = () => {
   return new HttpLink({
-    uri: 'https://api-dev.foodstyles.com/graphql',
+    uri: config.url,
     fetch,
   })
 }
 
 const authLink = setContext((_, { headers }) => {
-  const requestHeader = { ...headers }
-  requestHeader['Authorization'] = `Bearer ${config.token}`
-  return { headers: requestHeader }
+  const clientHeaders = {
+    ...headers,
+    Authorization: `Bearer ${config.token}`
+  }
+  return { headers: clientHeaders }
 })
 
-const httpLink = ApolloLink.from([errorLink, authLink, gethttpLink()])
+const httpLink = ApolloLink.from([errorLink, authLink, getHttpLink()])
 
 const initClient = () => {
   const link = split(
