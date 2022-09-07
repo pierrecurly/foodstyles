@@ -1,5 +1,5 @@
 # Setup
-1. git clone `git@github.com:pierrecurly/foodstyles.git foodstyles`
+1. git clone `git@github.com:pierrecurly/foodstyles.git`
 2. cd foodstyles
 3. yarn install
 4. expo start
